@@ -422,7 +422,7 @@ header .head h3,
 /* مكرر: تنسيق input ضمن .search-bar (ظهر أكثر من مرة في الكود الأصلي) */
 .search-bar input {
     padding: 10px;
-    width: 600px;
+    width: 450px;
     /* قابل للتمدد مع flex أدناه */
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -511,7 +511,7 @@ hr {
    ========================= */
 .stories {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-start;
     gap: 30px;
     padding: 8px;

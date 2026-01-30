@@ -1,4 +1,3 @@
-
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -15,6 +14,29 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\WorkerController;
+
+use App\Http\Controllers\ProfileController;
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Admin Auth Routes
@@ -103,39 +125,44 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 */
 
 
-Route::get('/', [VisitorController::class, 'index'])->name('home');
 
-Route::get('/', function () {
-    return view('visitor.index');
-})->name('home');
 
-Route::get('/about', function () {
-    return view('visitor.about');
-})->name('about');
-
-Route::get('/all_story', function () {
-    return view('visitor.all_story');
-})->name('all_story');
-
-Route::get('/profile', [VisitorController::class, 'profile'])->name('profile');
 
 /*
 |--------------------------------------------------------------------------
-| Temporary Auth Pages (Static Views)
+| Web Routes
 |--------------------------------------------------------------------------
 */
-// Route::get('/login', function () {
-//     return view('auth.login');
-// })->name('login');
 
-// Route::get('/register', function () {
-//     return view('auth.register');
-// })->name('register');
+Route::get('/', [VisitorController::class, 'index'])->name('home');
 
-// Route::get('/reset-password', function () {
-//     return view('auth.reset-password');
-// })->name('reset-password');
+Route::get('/all_story', [VisitorController::class, 'allStory'])->name('all_story');
+Route::get('/all-story', [VisitorController::class, 'allStory'])->name('allStory');
 
-// Route::get('/code', function () {
-//     return view('auth.code');
-// })->name('code');
+Route::get('/story/{slug}', [VisitorController::class, 'showStory'])->name('story.show');
+
+Route::get('/profile', [VisitorController::class, 'profile'])->name('profile');
+Route::get('/about', [VisitorController::class, 'about'])->name('about');
+
+Route::get('/favorites', [VisitorController::class, 'favorites'])->name('favorites');
+Route::get('/favorites-folders', [VisitorController::class, 'favoriteFolders'])->name('favorites.folders');
+Route::get('/edit-account', [VisitorController::class, 'editAccount'])->name('edit.account');
+
+/*
+| لو مشروعك مركّب Breeze أو أي Auth جاهز
+| خليه يحمّل routes/auth.php
+*/
+require __DIR__ . '/auth.php';
+
+/*
+| لو مش مركّب Auth جاهز وبتستخدم صفحاتك اليدوية داخل VisitorController
+| فك التعليق عن اللي تحت
+| ولا تخلط بين الطريقتين في نفس الوقت
+*/
+
+Route::get('/login', [VisitorController::class, 'login'])->name('login');
+Route::get('/register', [VisitorController::class, 'register'])->name('register');
+
+Route::get('/reset-password', [VisitorController::class, 'resetPassword'])->name('password.request');
+Route::get('/code', [VisitorController::class, 'code'])->name('auth.code');
+Route::get('/confirmation', [VisitorController::class, 'confirmation'])->name('auth.confirmation');

@@ -17,18 +17,18 @@ class WritersSeeder extends Seeder
 
         $writers = [
             [
-                'name' => 'Writer One',
-                'email' => 'writer1@bookworm.test',
+                'name' => 'ليلى صايا ',
+                'email' => 'lyla@bookworm.test',
                 'phone' => '01000000001',
-                'bio' => 'كاتب قصص أطفال.',
+                'bio' => 'كاتبة سورية وعضو اتحاد الكتاب العرب  .',
                 'is_verified' => 1,
                 'is_active' => 1,
             ],
             [
-                'name' => 'Writer Two',
-                'email' => 'writer2@bookworm.test',
+                'name' => ' احمد جمال',
+                'email' => 'ahmed@bookworm.test',
                 'phone' => '01000000002',
-                'bio' => 'مهتم بحكايات قبل النوم.',
+                'bio' => 'كاتب فلسطيني وشاعر لل .',
                 'is_verified' => 0,
                 'is_active' => 1,
             ],

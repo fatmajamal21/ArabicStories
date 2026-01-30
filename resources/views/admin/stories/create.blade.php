@@ -42,8 +42,11 @@
                 <select name="age_group">
                     <option value="">اختر</option>
                     <option value="3-5" @selected(old('age_group')==='3-5')>3-5</option>
-                    <option value="6-8" @selected(old('age_group')==='6-8')>6-8</option>
-                    <option value="9-12" @selected(old('age_group')==='9-12')>9-12</option>
+                    <option value="5-7" @selected(old('age_group')==='5-7')>5-7</option>
+                    <option value="7-9" @selected(old('age_group')==='7-9')>7-9</option>
+                     <option value="9-12" @selected(old('age_group')==='9-12')>9-12</option>
+                    <option value="12-15" @selected(old('age_group')==='12-15')>12-15</option>
+
                 </select>
             </div>
 

@@ -35,10 +35,12 @@ class Story extends Model
         return $this->belongsTo(Category::class);
     }
 
+    // App\Models\Story.php
     public function writer()
     {
         return $this->belongsTo(Writer::class, 'writer_id');
     }
+
 
     public function comments()
     {

@@ -271,7 +271,7 @@ header .head h3,
     margin-top: 20px;
 }
 
-.stories-container2 {
+/* .stories-container2 {
     padding: 15px;
     background-color: #ffffff;
     width: 100%;
@@ -279,7 +279,19 @@ header .head h3,
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-top: 20px;
+} */
+.stories-container2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    /* توسيط */
+    padding: 20px 10px;
 }
+
 
 .story-card {
     background: #fff;
@@ -432,7 +444,7 @@ header .head h3,
 /* مكرر: تنسيق input ضمن .search-bar (ظهر أكثر من مرة في الكود الأصلي) */
 .search-bar input {
     padding: 10px;
-    width: 600px;
+    width: 450px;
     /* قابل للتمدد مع flex أدناه */
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -521,10 +533,10 @@ hr {
    ========================= */
 .stories {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-start;
     gap: 30px;
-    padding: 8px;
+    padding: 20px;
 }
 
 .categories {

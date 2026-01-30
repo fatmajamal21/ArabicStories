@@ -12,19 +12,20 @@
     <li><a href="{{ route('home') }}#features">مميزات المنصة</a></li>
             </ul>
 
- <div class="user-section">
-            @if(auth()->check())
-                {{-- إذا كان المستخدم مسجل دخول --}}
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="auth-btn signout ">تسجيل الخروج</button>
-                </form>
-            @else
-                {{-- إذا كان زائراً --}}
-                {{-- {{ route('login') }} --}}
-                <a href="#" class="auth-btn Login">تسجيل دخول</a>
-            @endif
-        </div>
+<div class="user-section">
+    @if(auth()->check())
+        {{-- إذا كان المستخدم مسجل دخول --}}
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="auth-btn signout">تسجيل الخروج</button>
+        </form>
+    @else
+        {{-- إذا كان زائراً --}}
+        <a href="{{ route('login') }}" class="auth-btn Login">تسجيل دخول</a>
+        <a href="{{ route('register') }}" class="auth-btn Login">إنشاء حساب</a>
+    @endif
+</div>
+
 
             {{-- <div class="user-section">
                 <a href="#" class="auth-btn Login">تسجيل الدخول</a>

@@ -192,31 +192,30 @@
         </table>
     </div>
 
-    <div class="card p-3">
-        <h4>أحدث الكتّاب</h4>
-        <div style="height:10px;"></div>
+<div class="card p-3">
+    <h4>التصنيقات </h4>
+    <div style="height:10px;"></div>
 
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>التصنيف</th>
+            <th>عدد القصص</th>
+        </tr>
+        </thead>
+        <tbody>
+        @forelse($Categoriescont as $c)
             <tr>
-                <th>الكاتب</th>
-                <th>موثّق</th>
-                <th>نشط</th>
+                <td>{{ $c->name }}</td>
+                <td>{{ $c->stories_count }}</td> <!-- هنا نعرض عدد القصص -->
             </tr>
-            </thead>
-            <tbody>
-            @forelse($latestWriters as $w)
-                <tr>
-                    <td>{{ $w->name }}</td>
-                    <td>{{ $w->is_verified ? 'نعم' : 'لا' }}</td>
-                    <td>{{ $w->is_active ? 'نعم' : 'لا' }}</td>
-                </tr>
-            @empty
-                <tr><td colspan="3">لا يوجد</td></tr>
-            @endforelse
-            </tbody>
-        </table>
-    </div>
+        @empty
+            <tr><td colspan="3">لا يوجد</td></tr>
+        @endforelse
+        </tbody>
+    </table>
+</div>
+
         <div class="card p-3">
         <h4>العاملون </h4>
         <div style="height:10px;"></div>

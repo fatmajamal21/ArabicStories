@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Story;
 use App\Models\User;
 use App\Models\Worker;
@@ -43,10 +44,11 @@ class DashboardController extends Controller
 
         $latestWriters = Writer::latest()->take(8)->get();
         $latestWorkers = Worker::latest()->take(8)->get();
+        $Categoriescont = Category::latest()->take(8)->withCount('stories')->get();
 
         return view(
             'admin.dashboard',
-            compact('stats', 'latestStories', 'pendingStories', 'topWriters', 'latestWriters', 'latestWorkers')
+            compact('stats', 'latestStories', 'pendingStories', 'topWriters', 'latestWriters', 'latestWorkers', 'Categoriescont')
         );
     }
 }
