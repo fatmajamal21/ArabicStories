@@ -13,17 +13,17 @@
             </ul>
 
 <div class="user-section">
-    @if(auth()->check())
-        {{-- إذا كان المستخدم مسجل دخول --}}
-        <form action="{{ route('logout') }}" method="POST">
+   @guest
+        <a href="{{ route('login') }}">تسجيل الدخول</a>
+        <a href="{{ route('register') }}">إنشاء حساب</a>
+    @endguest
+
+    @auth
+        <form method="post" action="{{ route('logout') }}" style="display:inline;">
             @csrf
-            <button type="submit" class="auth-btn signout">تسجيل الخروج</button>
+            <button type="submit" class="nav-logout-btn">تسجيل الخروج</button>
         </form>
-    @else
-        {{-- إذا كان زائراً --}}
-        <a href="{{ route('login') }}" class="auth-btn Login">تسجيل دخول</a>
-        <a href="{{ route('register') }}" class="auth-btn Login">إنشاء حساب</a>
-    @endif
+    @endauth
 </div>
 
 

@@ -1,7 +1,6 @@
 @extends('layouts.master')
-    <title>تسجيل حساب جديد</title>
 
-@section('title', 'تسجيل حساب جديد    | Bookworm')
+@section('title', ' التحقق من الكود ')
 
 @section('content')
     <div class="login-container">

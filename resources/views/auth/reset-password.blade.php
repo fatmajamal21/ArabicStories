@@ -1,39 +1,45 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('password.store') }}">
-        @csrf
+@extends('layouts.master')
 
-        <!-- Password Reset Token -->
-        <input type="hidden" name="token" value="{{ $request->route('token') }}">
+@section('title', ' كلمة السر ')
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email', $request->email)" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+@section('content')
+    <div class="login-container">
+        <div class="image-section">
+            <img src="../img/تعيين كلمة مرور - Copy.png" alt="صورة تسجيل الدخول">
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="form-section">
+            <img src="../img/logo.png" alt="Logo" class="logo">
+
+            <h2> تعيين كلمة مرور جديدة</h2>
+
+            <div class="form-group">
+                <label for="password">كلمة المرور</label>
+                <div class="password-container">
+                    <input type="password" class="form-control" id="password" value="********">
+                    <button class="toggle-password" type="button">
+                        <i class="fas fa-eye input-icon2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm-password">تأكيد كلمة المرور</label>
+                <div class="password-container">
+                    <input type="password" class="form-control" id="confirm-password" value="********">
+                    <button class="toggle-password" type="button">
+                        <i class="fas fa-eye input-icon2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button type="submit" class="login-btn">تأكيد</button>
+
+        </div>
+        <div class="image-section">
+            <img src="../img/تعيين كلمة مرور - Copy (2).png" alt="صورة تسجيل الدخول">
         </div>
 
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+    </div>
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Reset Password') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@endsection

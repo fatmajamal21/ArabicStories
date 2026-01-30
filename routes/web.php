@@ -36,6 +36,21 @@ require __DIR__ . '/auth.php';
 
 
 
+Route::middleware(['auth'])->group(function () {
+    // مسار ديناميكي للصفحة الشخصية للمستخدم بناءً على اسمه
+    Route::get('/{username}', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/user', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/edit-account', [UserController::class, 'editAccount'])->name('user.editAccount');
+    Route::post('/user/update-account', [UserController::class, 'updateAccount'])->name('user.updateAccount');
+    Route::get('/user/favorites', [UserController::class, 'favorites'])->name('user.favorites');
+    Route::get('/user/favorites-folders', [UserController::class, 'favoritesFolders'])->name('user.favoritesFolders');
+
+    Route::get('/user/story/{slug}', [UserController::class, 'showStory'])->name('user.story');
+    Route::get('/user/all-story', [UserController::class, 'allStory'])->name('user.allStory');
+});
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +61,21 @@ require __DIR__ . '/auth.php';
 Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+
+
+
+Route::get('/{username}', function ($username) {
+    // البحث عن المستخدم باستخدام اسم المستخدم
+    $user = App\Models\User::where('name', $username)->first();
+
+    // إذا لم يتم العثور على المستخدم، عرض خطأ 404
+    if (!$user) {
+        abort(404); // أو يمكنك توجيه إلى صفحة 404
+    }
+
+    // عرض صفحة الملف الشخصي للمستخدم
+    return view('user.profile', compact('user'));
+})->middleware(['auth']);
 
 /*
 |--------------------------------------------------------------------------

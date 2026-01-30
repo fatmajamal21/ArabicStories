@@ -6,8 +6,9 @@ use App\Models\Category;
 use App\Models\Story;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-class VisitorController extends Controller
+class UserController extends Controller
 {
     private array $ageMap = [
         '3_5'   => 'من 3-5 سنوات',
@@ -60,7 +61,6 @@ class VisitorController extends Controller
 
         $dailyStories = Story::query()
             ->where('status', 'published')
-            // ->whereIn('age_group', [$dailyAgeKey, $dailyAgeLabel])
             ->inRandomOrder()
             ->take(5)
             ->get();
@@ -88,7 +88,7 @@ class VisitorController extends Controller
 
         $homeStories = $homeStoriesQuery->take(8)->get();
 
-        return view('visitor.index', compact(
+        return view('user.index', compact(
             'workers',
             'categories',
             'dailyStories',
@@ -97,6 +97,73 @@ class VisitorController extends Controller
             'selectedAges',
             'selectedCats'
         ));
+    }
+
+    public function profile()
+    {
+        $user = Auth::user(); // الحصول على بيانات المستخدم الحالي
+
+        // استرجاع القصص اليومية (مثل VisitorController)
+        $dailyAgeKey = '3_5';
+        $dailyAgeLabel = $this->ageMap[$dailyAgeKey];
+
+        $dailyStories = Story::query()
+            ->where('status', 'published')
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
+        // تمرير البيانات إلى الـ view
+        return view('user.profile', compact('user', 'dailyStories'));
+    }
+
+
+    public function editAccount()
+    {
+        $user = Auth::user();
+        return view('user.edit_account', compact('user'));
+    }
+
+    // public function updateAccount(Request $request)
+    // {
+    //     $user = Auth::user();
+
+    //     // التحقق من البيانات المدخلة
+    //     $request->validate([
+    //         'name' => ['required', 'string', 'max:255'],
+    //         'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+    //     ]);
+
+    //     // تحديث بيانات المستخدم
+    //     $user->update([
+    //         'name' => $request->input('name'),
+    //         'email' => $request->input('email'),
+    //     ]);
+
+    //     return redirect()->route('user.profile')->with('success', 'تم تحديث البيانات بنجاح!');
+    // }
+
+    public function favorites()
+    {
+        $user = Auth::user();
+        $favoriteStories = $user->favorites; // فرضًا أن هناك علاقة favorites في الـ User
+
+        return view('user.favorites', compact('favoriteStories'));
+    }
+
+    public function favoritesFolders()
+    {
+        return view('user.favorites_folders');
+    }
+
+    public function showStory($slug)
+    {
+        $story = Story::query()
+            ->where('slug', $slug)
+            ->where('status', 'published')
+            ->firstOrFail();
+
+        return view('user.story', compact('story'));
     }
 
     public function allStory(Request $request)
@@ -132,7 +199,7 @@ class VisitorController extends Controller
 
         $stories = $query->latest()->paginate(12)->withQueryString();
 
-        return view('visitor.all_story', compact(
+        return view('user.all_story', compact(
             'stories',
             'categories',
             'selectedAges',
@@ -140,75 +207,4 @@ class VisitorController extends Controller
             'q'
         ));
     }
-
-    public function all_story(Request $request)
-    {
-        return $this->allStory($request);
-    }
-
-    public function showStory($slug)
-    {
-        $story = Story::query()
-            ->where('slug', $slug)
-            ->where('status', 'published')
-            ->with('writer')
-            ->firstOrFail();
-
-        return view('visitor.story', compact('story'));
-    }
-
-    public function profile()
-    {
-        return view('visitor.profile');
-    }
-
-    public function about()
-    {
-        return view('visitor.about');
-    }
-
-    public function story()
-    {
-        return view('visitor.story');
-    }
-
-    // public function favorites()
-    // {
-    //     return view('visitor.favorites');
-    // }
-
-    // public function favoriteFolders()
-    // {
-    //     return view('visitor.favorites_folders');
-    // }
-
-    // public function editAccount()
-    // {
-    //     return view('visitor.edit_account');
-    // }
-
-    // public function login()
-    // {
-    //     return view('auth.login');
-    // }
-
-    // public function register()
-    // {
-    //     return view('auth.register');
-    // }
-
-    // public function resetPassword()
-    // {
-    //     return view('auth.reset-password');
-    // }
-
-    // public function code()
-    // {
-    //     return view('auth.code');
-    // }
-
-    // public function confirmation()
-    // {
-    //     return view('auth.confirmation');
-    // }
 }
