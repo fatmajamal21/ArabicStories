@@ -14,10 +14,15 @@
 
         <h2>تسجيل حساب جديد</h2>
 
-        <form method="POST"action="{{ route('register') }}"
->
+<form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
             @csrf
 
+    {{-- الصورة --}}
+    {{-- <div class="form-group">
+        <label>الصورة الشخصية</label>
+        <input type="file" name="avatar" class="form-control">
+        @error('avatar') <small class="text-danger">{{ $message }}</small> @enderror
+    </div> --}}
             {{-- الإيميل --}}
             <div class="form-group">
                 <label>الإيميل</label>
@@ -31,6 +36,7 @@
                 <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
                 @error('name') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
+            
 
             {{-- كلمة المرور --}}
             <div class="form-group">

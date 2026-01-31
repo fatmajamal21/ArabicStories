@@ -6,9 +6,71 @@ use App\Models\Category;
 use App\Models\Story;
 use App\Models\Worker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
+
+
 
 class VisitorController extends Controller
 {
+    private function homeData(Request $request): array
+    {
+        $q = trim((string) $request->query('q'));
+
+        $selectedAges = (array) $request->input('age', []);
+        $selectedCats = (array) $request->input('cat', []);
+
+        $workers = Worker::where('is_active', 1)
+            ->latest()
+            ->take(12)
+            ->get();
+
+        $categories = Category::where('is_active', 1)
+            ->orderBy('name')
+            ->get();
+
+        $dailyStories = Story::where('status', 'published')
+            ->inRandomOrder()
+            ->take(5)
+            ->get();
+
+        $homeStoriesQuery = Story::where('status', 'published')
+            ->with('category');
+
+        if (!empty($selectedAges)) {
+            $homeStoriesQuery->whereIn(
+                'age_group',
+                $this->normalizeAges($selectedAges)
+            );
+        }
+
+        if (!empty($selectedCats)) {
+            $homeStoriesQuery->whereHas('category', function ($q2) use ($selectedCats) {
+                $q2->whereIn('slug', $selectedCats);
+            });
+        }
+
+        if ($q !== '') {
+            $homeStoriesQuery->where('title', 'like', '%' . $q . '%')->latest();
+        } else {
+            $homeStoriesQuery->inRandomOrder();
+        }
+
+        $homeStories = $homeStoriesQuery->take(8)->get();
+
+        return compact(
+            'workers',
+            'categories',
+            'dailyStories',
+            'homeStories',
+            'q',
+            'selectedAges',
+            'selectedCats'
+        );
+    }
+
     private array $ageMap = [
         '3_5'   => 'من 3-5 سنوات',
         '5_7'   => 'من 5-7 سنوات',
@@ -39,64 +101,18 @@ class VisitorController extends Controller
 
     public function index(Request $request)
     {
-        $q = trim((string) $request->query('q'));
+        return view(
+            'visitor.index',
+            $this->homeData($request)
+        );
+    }
 
-        $selectedAges = (array) $request->input('age', []);
-        $selectedCats = (array) $request->input('cat', []);
-
-        $workers = Worker::query()
-            ->where('is_active', 1)
-            ->latest()
-            ->take(12)
-            ->get();
-
-        $categories = Category::query()
-            ->where('is_active', 1)
-            ->orderBy('name')
-            ->get();
-
-        $dailyAgeKey = '3_5';
-        $dailyAgeLabel = $this->ageMap[$dailyAgeKey];
-
-        $dailyStories = Story::query()
-            ->where('status', 'published')
-            // ->whereIn('age_group', [$dailyAgeKey, $dailyAgeLabel])
-            ->inRandomOrder()
-            ->take(5)
-            ->get();
-
-        $homeStoriesQuery = Story::query()
-            ->where('status', 'published')
-            ->with('category');
-
-        if (!empty($selectedAges)) {
-            $ageValues = $this->normalizeAges($selectedAges);
-            $homeStoriesQuery->whereIn('age_group', $ageValues);
-        }
-
-        if (!empty($selectedCats)) {
-            $homeStoriesQuery->whereHas('category', function ($q2) use ($selectedCats) {
-                $q2->whereIn('slug', $selectedCats);
-            });
-        }
-
-        if ($q !== '') {
-            $homeStoriesQuery->where('title', 'like', '%' . $q . '%')->latest();
-        } else {
-            $homeStoriesQuery->inRandomOrder();
-        }
-
-        $homeStories = $homeStoriesQuery->take(8)->get();
-
-        return view('visitor.index', compact(
-            'workers',
-            'categories',
-            'dailyStories',
-            'homeStories',
-            'q',
-            'selectedAges',
-            'selectedCats'
-        ));
+    public function profile(Request $request)
+    {
+        return view(
+            'visitor.index',
+            $this->homeData($request)
+        );
     }
 
     public function allStory(Request $request)
@@ -157,10 +173,44 @@ class VisitorController extends Controller
         return view('visitor.story', compact('story'));
     }
 
-    public function profile()
+
+    public function editAccount()
     {
-        return view('visitor.profile');
+        return view('visitor.edit_account');
     }
+    public function updateAccount(Request $request)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+
+        $data = $request->validate([
+            'name'     => 'required|string|max:255|unique:users,name,' . $user->id,
+            'password' => 'nullable|min:8|confirmed',
+            'avatar'   => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        }
+
+        if (!empty($data['password'])) {
+            $data['password'] = Hash::make($data['password']);
+        } else {
+            unset($data['password']);
+        }
+
+        $user->update($data); // ✅ هذا يعمل 100%
+
+        return redirect()
+            ->route('home')
+            ->with('success', 'تم تحديث بيانات الحساب بنجاح');
+    }
+
 
     public function about()
     {
@@ -182,10 +232,7 @@ class VisitorController extends Controller
         return view('visitor.favorites_folders');
     }
 
-    public function editAccount()
-    {
-        return view('visitor.edit_account');
-    }
+
 
     public function login()
     {

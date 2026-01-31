@@ -80,7 +80,9 @@
 
 
 
+@endsection
 
+@push('scripts')
 
 
     <script>
@@ -117,6 +119,4 @@
 
 
     </script>
-</body>
-
-</html>
+@endpush

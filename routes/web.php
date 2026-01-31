@@ -14,6 +14,9 @@ use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\WorkerController;
+use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\RegisterController;
 
 use App\Http\Controllers\ProfileController;
 
@@ -53,7 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-use App\Http\Controllers\RegisterController;
+
 
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
     ->name('register');
@@ -66,8 +69,15 @@ require __DIR__ . '/auth.php';
 
 
 Route::middleware(['auth'])->group(function () {
-    // مسار ديناميكي للصفحة الشخصية للمستخدم بناءً على اسمه
-    Route::get('/{username}', [UserController::class, 'profile'])->name('user.profile');
+    Route::get('/{username}', function ($username, \Illuminate\Http\Request $request) {
+
+        $user = App\Models\User::where('name', $username)->firstOrFail();
+
+        $controller = app(\App\Http\Controllers\VisitorController::class);
+
+        return $controller->index($request);
+    })->middleware(['auth']);
+
     Route::get('/user', [UserController::class, 'index'])->name('user.index');
     Route::get('/user/edit-account', [UserController::class, 'editAccount'])->name('user.editAccount');
     Route::post('/user/update-account', [UserController::class, 'updateAccount'])->name('user.updateAccount');
@@ -93,18 +103,8 @@ Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admi
 
 
 
-Route::get('/{username}', function ($username) {
-    // البحث عن المستخدم باستخدام اسم المستخدم
-    $user = App\Models\User::where('name', $username)->first();
 
-    // إذا لم يتم العثور على المستخدم، عرض خطأ 404
-    if (!$user) {
-        abort(404); // أو يمكنك توجيه إلى صفحة 404
-    }
 
-    // عرض صفحة الملف الشخصي للمستخدم
-    return view('user.profile', compact('user'));
-})->middleware(['auth']);
 
 /*
 |--------------------------------------------------------------------------
@@ -151,6 +151,9 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('categories')->name('categories.')->group(function () {
@@ -205,4 +208,26 @@ Route::get('/register', [VisitorController::class, 'register'])->name('register'
 
 Route::get('/reset-password', [VisitorController::class, 'resetPassword'])->name('password.request');
 Route::get('/code', [VisitorController::class, 'code'])->name('auth.code');
-Route::get('/confirmation', [VisitorController::class, 'confirmation'])->name('auth.confirmation');
+// Route::get('/confirmation', [VisitorController::class, 'confirmation'])->name('auth.confirmation');
+Route::get('/confirmation', function () {
+    return view('auth.confirmation');
+})->name('password.confirmation');
+Route::get('/edit-account', [VisitorController::class, 'editAccount'])
+    ->name('edit.account');
+
+Route::post('/edit-account', [VisitorController::class, 'updateAccount'])
+    ->name('edit.account.update');
+
+
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->middleware('guest')
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->middleware('guest')
+    ->name('password.store');

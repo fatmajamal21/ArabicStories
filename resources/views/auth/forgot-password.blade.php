@@ -18,8 +18,8 @@
                 سيتم إرسال رابط إعادة تعيين كلمة السر.
             </p>
 
-            <form method="POST" action="{{ route('password.email') }}">
-                @csrf
+          <form method="POST" action="{{ route('password.email') }}">
+    @csrf
 
                 <div class="form-group">
                     <label for="email">البريد الإلكتروني</label>

@@ -25,6 +25,20 @@
             @csrf
             <button type="submit" class="nav-logout-btn auth-btn signout">تسجيل الخروج</button>
         </form>
+                       <div class="user-profile">
+                    <img src="../img/user - Copy.png" alt="صورة المستخدم" class="user-img">
+
+
+                    <div class="dropdown-menu">
+                        <a href="{{ route('edit.account') }}"> إعدادات الحساب</a>
+                        <a href="{{ route('favorites') }}">المفضلة</a>
+                        <!-- <a href="#"><i class="fas fa-user"></i>الملف الشخصي</a> -->
+                        <!-- <a href="#"><i class="fas fa-cog"></i> إعدادات الحساب</a> -->
+                        <!-- <a href="#"><i class="fas fa-book"></i>المفضلة</a> -->
+                        <!-- <a href="#"><i class="fas fa-history"></i>السجل</a> -->
+                        <!-- <a href="#"><i class="fas fa-question-circle"></i>المساعدة</a> -->
+                    </div>
+                </div>
     @endauth
 </div>
 
