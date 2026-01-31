@@ -12,16 +12,18 @@
     <li><a href="{{ route('home') }}#features">مميزات المنصة</a></li>
             </ul>
 
+
+
 <div class="user-section">
    @guest
-        <a href="{{ route('login') }}">تسجيل الدخول</a>
-        <a href="{{ route('register') }}">إنشاء حساب</a>
+        <a href="{{ route('login') }}" class="auth-btn signout">تسجيل الدخول</a>
+        <a href="{{ route('register') }}" class="auth-btn Login">إنشاء حساب</a>
     @endguest
 
     @auth
         <form method="post" action="{{ route('logout') }}" style="display:inline;">
             @csrf
-            <button type="submit" class="nav-logout-btn">تسجيل الخروج</button>
+            <button type="submit" class="nav-logout-btn auth-btn signout">تسجيل الخروج</button>
         </form>
     @endauth
 </div>

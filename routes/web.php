@@ -22,6 +22,27 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', [VisitorController::class, 'index'])->name('home');
+
+Route::get('/all_story', [VisitorController::class, 'allStory'])->name('all_story');
+Route::get('/all-story', [VisitorController::class, 'allStory'])->name('allStory');
+
+Route::get('/story/{slug}', [VisitorController::class, 'showStory'])->name('story.show');
+
+Route::get('/profile', [VisitorController::class, 'profile'])->name('profile');
+Route::get('/about', [VisitorController::class, 'about'])->name('about');
+
+Route::get('/favorites', [VisitorController::class, 'favorites'])->name('favorites');
+Route::get('/favorites-folders', [VisitorController::class, 'favoriteFolders'])->name('favorites.folders');
+Route::get('/edit-account', [VisitorController::class, 'editAccount'])->name('edit.account');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -31,6 +52,14 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+use App\Http\Controllers\RegisterController;
+
+Route::get('/register', [RegisterController::class, 'showRegistrationForm'])
+    ->name('register');
+
+Route::post('/register', [RegisterController::class, 'register'])
+    ->name('register.store');
 
 require __DIR__ . '/auth.php';
 
@@ -158,25 +187,6 @@ Route::middleware('auth:admin')->prefix('admin')->name('admin.')->group(function
 
 
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-Route::get('/', [VisitorController::class, 'index'])->name('home');
-
-Route::get('/all_story', [VisitorController::class, 'allStory'])->name('all_story');
-Route::get('/all-story', [VisitorController::class, 'allStory'])->name('allStory');
-
-Route::get('/story/{slug}', [VisitorController::class, 'showStory'])->name('story.show');
-
-Route::get('/profile', [VisitorController::class, 'profile'])->name('profile');
-Route::get('/about', [VisitorController::class, 'about'])->name('about');
-
-Route::get('/favorites', [VisitorController::class, 'favorites'])->name('favorites');
-Route::get('/favorites-folders', [VisitorController::class, 'favoriteFolders'])->name('favorites.folders');
-Route::get('/edit-account', [VisitorController::class, 'editAccount'])->name('edit.account');
 
 /*
 | لو مشروعك مركّب Breeze أو أي Auth جاهز

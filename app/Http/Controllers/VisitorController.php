@@ -172,43 +172,43 @@ class VisitorController extends Controller
         return view('visitor.story');
     }
 
-    // public function favorites()
-    // {
-    //     return view('visitor.favorites');
-    // }
+    public function favorites()
+    {
+        return view('visitor.favorites');
+    }
 
-    // public function favoriteFolders()
-    // {
-    //     return view('visitor.favorites_folders');
-    // }
+    public function favoriteFolders()
+    {
+        return view('visitor.favorites_folders');
+    }
 
-    // public function editAccount()
-    // {
-    //     return view('visitor.edit_account');
-    // }
+    public function editAccount()
+    {
+        return view('visitor.edit_account');
+    }
 
-    // public function login()
-    // {
-    //     return view('auth.login');
-    // }
+    public function login()
+    {
+        return view('auth.login');
+    }
 
-    // public function register()
-    // {
-    //     return view('auth.register');
-    // }
+    public function register()
+    {
+        return view('auth.register');
+    }
 
-    // public function resetPassword()
-    // {
-    //     return view('auth.reset-password');
-    // }
+    public function resetPassword()
+    {
+        return view('auth.reset-password');
+    }
 
-    // public function code()
-    // {
-    //     return view('auth.code');
-    // }
+    public function code()
+    {
+        return view('auth.code');
+    }
 
-    // public function confirmation()
-    // {
-    //     return view('auth.confirmation');
-    // }
+    public function confirmation()
+    {
+        return view('auth.confirmation');
+    }
 }

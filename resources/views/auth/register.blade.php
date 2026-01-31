@@ -1,72 +1,58 @@
 @extends('layouts.master')
 
-@section('title', 'إنشاء حساب ')
+@section('title', 'إنشاء حساب')
 
 @section('content')
-    <div class="login-container">
-        <div class="image-section">
-            <img src="../img/تسجيل.png" alt="صورة تسجيل الدخول">
-        </div>
+<div class="login-container">
 
-        <div class="form-section">
-            <img src="../img/logo.png" alt="Logo" class="logo">
+    <div class="image-section">
+        <img src="{{ asset('img/تسجيل.png') }}" alt="صورة التسجيل">
+    </div>
 
-            <h2>تسجيل حساب جديد</h2>
+    <div class="form-section">
+        <img src="{{ asset('img/logo.png') }}" alt="Logo" class="logo">
 
+        <h2>تسجيل حساب جديد</h2>
+
+        <form method="POST"action="{{ route('register') }}"
+>
+            @csrf
+
+            {{-- الإيميل --}}
             <div class="form-group">
-                <label for="email">الإيميل</label>
-                <input type="email" class="form-control" id="email" value="marie@gmail.com" readonly>
-                <i class="fas fa-envelope input-icon1"></i>
+                <label>الإيميل</label>
+                <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
+            {{-- اسم المستخدم --}}
             <div class="form-group">
-                <label for="username">اسم المستخدم</label>
-                <input type="text" class="form-control" id="username" value="محمد أبهم">
-                <i class="fas fa-user input-icon1"></i>
+                <label>اسم المستخدم</label>
+                <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
+                @error('name') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
+            {{-- كلمة المرور --}}
             <div class="form-group">
-                <label for="password">كلمة المرور</label>
-                <div class="password-container">
-                    <input type="password" class="form-control" id="password" value="********">
-                    <button class="toggle-password" type="button">
-                        <i class="fas fa-eye input-icon2"></i>
-                    </button>
-                </div>
+                <label>كلمة المرور</label>
+                <input type="password" name="password" class="form-control" required>
+                @error('password') <small class="text-danger">{{ $message }}</small> @enderror
             </div>
 
+            {{-- تأكيد كلمة المرور --}}
             <div class="form-group">
-                <label for="confirm-password">تأكيد كلمة المرور</label>
-                <div class="password-container">
-                    <input type="password" class="form-control" id="confirm-password" value="********">
-                    <button class="toggle-password" type="button">
-                        <i class="fas fa-eye input-icon2"></i>
-                    </button>
-                </div>
+                <label>تأكيد كلمة المرور</label>
+                <input type="password" name="password_confirmation" class="form-control" required>
             </div>
 
             <button type="submit" class="login-btn">تسجيل</button>
+        </form>
 
-            <div class="register-link">
-                <label>هل لديك حساب؟</label>
-                <a href="../Visitor/login.html">تسجيل الدخول</a>
-            </div>
-
-            <div class="social-login">
-                <h3>التسجيل من خلال</h3>
-                <div class="social-icons">
-                    <div class="social-icon google">
-                        <i class="fab fa-google"></i>
-                    </div>
-                    <div class="social-icon twitter">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <div class="social-icon facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </div>
-                </div>
-            </div>
+        <div class="register-link">
+            <label>هل لديك حساب؟</label>
+            <a href="{{ route('login') }}">تسجيل الدخول</a>
         </div>
-    </div>
 
+    </div>
+</div>
 @endsection
