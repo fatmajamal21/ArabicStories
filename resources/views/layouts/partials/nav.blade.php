@@ -10,6 +10,7 @@
                 <li><a href="{{ route('all_story') }}">قصص الأطفال</a></li>
         <li><a href="{{ route('home') }}#team">العاملون في الموقع</a></li>
     <li><a href="{{ route('home') }}#features">مميزات المنصة</a></li>
+   <a href="{{ route('contact_us') }}">تواصل معنا</a>
             </ul>
 
 
@@ -30,8 +31,10 @@
 
 
                     <div class="dropdown-menu">
-                        <a href="{{ route('edit.account') }}"> إعدادات الحساب</a>
-                        <a href="{{ route('favorites') }}">المفضلة</a>
+                        <a href="{{ route('user.editAccount', Auth::user()->name) }}"> إعدادات الحساب</a>
+<a href="{{ route('user.favorites', Auth::user()->name) }}">
+    المفضلة
+</a>
                         <!-- <a href="#"><i class="fas fa-user"></i>الملف الشخصي</a> -->
                         <!-- <a href="#"><i class="fas fa-cog"></i> إعدادات الحساب</a> -->
                         <!-- <a href="#"><i class="fas fa-book"></i>المفضلة</a> -->

@@ -6,6 +6,83 @@
 @section('content')
 
 <style>
+    .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.folder-btn {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #c5d86d;
+    cursor: pointer;
+}
+
+.folder-btn.add {
+    background: #eeeeee;
+}.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-box {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 320px;
+    text-align: center;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.folder-btn {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: #c5d86d;
+    cursor: pointer;
+}
+
+.folder-btn.add {
+    background: #eeeeee;
+}
 .story-modal{
     position:fixed;
     inset:0;
@@ -151,9 +228,9 @@
                 <img src="{{ asset('img/default-story.png') }}" alt="{{ $story->title }}">
             @endif
 
-            <div class="heart-btn" onclick="toggleHeart(this)">
-                <i class="far fa-heart"></i>
-            </div>
+          <div class="heart-btn" onclick="handleFavorite(event)">
+                            <i class="far fa-heart"></i>
+                        </div>
         </div>
 
         <div class="story-details">
@@ -269,7 +346,67 @@
         </audio>
     </div>
 </div>
+{{-- مودل غير مسجل --}}
+<div id="loginModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>انت غير مسجل</h3>
+        <p>يجب تسجيل الدخول لإضافة القصة إلى المفضلة</p>
+
+        <div class="modal-actions">
+            <a href="{{ route('login') }}" class="btn btn-primary">تسجيل الدخول</a>
+            <button onclick="closeModal()" class="btn btn-light">إلغاء</button>
+        </div>
+    </div>
+</div>
+
+{{-- مودل المفضلة --}}
+<div id="favoriteModal" class="modal-overlay">
+    <div class="modal-box">
+        <h3>إضافة للمفضلة</h3>
+        <p>اختر مجلد لإضافة القصة</p>
+
+        <div class="folders">
+            <button class="folder-btn">قصصي</button>
+            <button class="folder-btn">مكتبتي</button>
+            <button class="folder-btn add">+</button>
+        </div>
+
+        <div class="modal-actions">
+            <button onclick="closeModal()" class="btn btn-light">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+@endsection
+@push('scripts')
+
+@if(auth()->check())
 <script>
+    window.isLoggedIn = true
+</script>
+@else
+<script>
+    window.isLoggedIn = false
+</script>
+@endif
+
+<script>
+function handleFavorite(e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    if (window.isLoggedIn === false) {
+        document.getElementById('loginModal').style.display = 'flex'
+    } else {
+        document.getElementById('favoriteModal').style.display = 'flex'
+    }
+}
+
+function closeModal() {
+    document.getElementById('loginModal').style.display = 'none'
+    document.getElementById('favoriteModal').style.display = 'none'
+}
+
 /* =========================
    Story Modal (قراءة القصة)
 ========================= */
@@ -450,9 +587,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-
-@endsection
-
+@endpush
 
 
 

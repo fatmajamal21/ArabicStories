@@ -34,6 +34,6 @@ setTimeout(() => {
     }
 }, 4000);
 </script>
-
+@stack('scripts')
 </body>
 </html>

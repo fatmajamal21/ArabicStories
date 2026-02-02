@@ -15,40 +15,32 @@ class AuthenticatedSessionController extends Controller
 
     public function store(Request $request)
     {
-        // التحقق من البيانات المدخلة
         $request->validate([
             'email' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
+            'password' => ['required'],
         ]);
 
-        // محاولة تسجيل الدخول
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            // إعادة توليد الجلسة بعد تسجيل الدخول
+
             $request->session()->regenerate();
 
-            // الحصول على اسم المستخدم
             $username = Auth::user()->name;
 
-            // توجيه المستخدم إلى /{username} بعد تسجيل الدخول
-            return redirect()->intended("/$username");
+            return redirect()->to('/@' . $username);
         }
 
-        // في حال فشل تسجيل الدخول
         return back()->withErrors([
-            'email' => __('auth.failed'),
+            'email' => 'بيانات الدخول غير صحيحة',
         ]);
     }
 
     public function destroy(Request $request)
     {
-        // تسجيل الخروج
         Auth::logout();
 
-        // إلغاء الجلسة وتوليد مفتاح جديد
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // إعادة التوجيه إلى الصفحة الرئيسية
         return redirect('/');
     }
 }

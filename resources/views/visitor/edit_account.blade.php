@@ -9,9 +9,11 @@
     <div class="header_account">
         <div class="profile">
             <div class="profile-img">
-                <img
+                                    <img src="../img/user - Copy.png" alt="صورة المستخدم" class="user-img">
+
+                {{-- <img
                     src="{{ auth()->user()->avatar ? asset('storage/'.auth()->user()->avatar) : asset('img/default-user.png') }}"
-                    alt="صورة المستخدم">
+                    alt="صورة المستخدم"> --}}
             </div>
         </div>
     </div>

@@ -42,6 +42,7 @@
             </a>
         </li>
     <li>
+        
             <a href="{{ route('admin.workers.index') }}">
               <i class="bi bi-people"></i>
                 <span>العملون</span>
@@ -54,12 +55,20 @@
             </a>
         </li>
 
-        <li>
+        {{-- <li>
             <a href="{{ route('admin.comments.index') }}">
                 <i class="bi bi-chat-dots"></i>
                 <span>التعليقات</span>
             </a>
-        </li>
+        </li> --}}
+ <li>
+    <a href="{{ route('admin.contact-messages.index') }}">
+        {{-- <i class="bi bi-bar-chart"></i> --}}
+        <span>رسائل تواصل معنا</span>
+    </a>
+</li>
+
+
 
         <li>
             <a href="{{ route('admin.reports.index') }}">
